@@ -1,0 +1,56 @@
+#! /bin/bash
+
+photo_sort() {
+  if [ -z $1 ]; then
+    parent=""
+  else
+    parent="$1/"
+  fi
+
+  jpg=$parent"jpg"
+  raw=$parent"raw"
+  echo "raw $raw"
+  echo "jpg $jpg"
+
+  mkdir -p $jpg
+  mkdir -p $raw
+
+  echo "Moving *.JPG to $jpg"
+  mv $parent*.JPG $jpg 2>/dev/null
+
+  echo "Moving *.CR2 to $raw"
+  mv $parent*.CR2 $raw 2>/dev/null
+}
+
+photo_rm() {
+  if [ -z $1 ]; then
+    echo "`usage`\n need at least one file to remove"
+    exit 1
+  fi
+  img_base="_MG_"
+  for img in $@; do
+    rm -f "$img_base$img.JPG"
+    rm -f "$img_base$img.CR2"
+  done;
+}
+
+usage() {
+  echo "usage: photo -rm img1 img2 ... imgN"
+  echo "       photo -sort [source]"
+}
+
+if [ "$1"  == "-sort" ]; then
+  if [ "$2" == "--all" ]; then
+    for dir in `ls $3`; do
+      if [ -d $dir ]; then
+        photo_sort $dir
+      fi
+    done;
+  else
+    photo_sort $2
+  fi
+elif [ "$1" ==  "-rm" ]; then
+    photo_rm ${*:2} # all args except the first
+else
+  usage
+fi

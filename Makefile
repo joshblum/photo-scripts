@@ -1,2 +1,12 @@
-default:
-	cp photo_sort /usr/local/bin
+.PHONY: install
+
+default: install
+
+bin := /usr/local/bin
+program := photos
+
+install:
+	cp $(program) $(bin)
+
+uninstall:
+	rm $(bin)/$(program)
