@@ -36,7 +36,7 @@ photo_rm() {
 
 usage() {
   echo "usage: photos -rm img1 img2 ... imgN"
-  echo "       photos -sort [source]"
+  echo "       photos -sort [--all] [source]"
 }
 
 if [ "$1"  == "-sort" ]; then
