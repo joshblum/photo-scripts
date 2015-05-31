@@ -1,5 +1,19 @@
 #! /bin/bash
 
+IMG_BASE="_MG_"
+
+photo_rm() {
+  if [ -z $1 ]; then
+    echo "`usage`"
+    echo "Error: Need at least one file to remove."
+    exit 1
+  fi
+  for img in $@; do
+    rm -f "$IMG_BASE$img.JPG"
+    rm -f "$IMG_BASE$img.CR2"
+  done;
+}
+
 photo_sort() {
   if [ -z $1 ]; then
     parent=""
@@ -22,21 +36,29 @@ photo_sort() {
   mv $parent*.CR2 $raw 2>/dev/null
 }
 
-photo_rm() {
+photo_mv() {
   if [ -z $1 ]; then
-    echo "`usage`\n need at least one file to remove"
+    echo "`usage`"
+    echo "Error: need src directory"
     exit 1
+  else
+    srcdir=$1
   fi
-  img_base="_MG_"
-  for img in $@; do
-    rm -f "$img_base$img.JPG"
-    rm -f "$img_base$img.CR2"
-  done;
+
+  mkdir -p $srcdir
+
+  if [[ ( -z $2 ) && ( -z $3) ]]; then
+    mv $IMG_BASE* $srcdir
+  else
+    mv $IMG_BASE{$2..$3}* src
+  fi
+
 }
 
 usage() {
   echo "usage: photos -rm img1 img2 ... imgN"
   echo "       photos -sort [--all] [source]"
+  echo "       photos -mv src [lower_limit] [upper_limit]"
 }
 
 if [ "$1"  == "-sort" ]; then
@@ -51,6 +73,8 @@ if [ "$1"  == "-sort" ]; then
   fi
 elif [ "$1" ==  "-rm" ]; then
     photo_rm ${*:2} # all args except the first
+elif [ "$1" ==  "-mv" ]; then
+    photo_mv ${*:2} # all args except the first
 else
   usage
 fi
