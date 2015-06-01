@@ -23,8 +23,6 @@ photo_sort() {
 
   jpg=$parent"jpg"
   raw=$parent"raw"
-  echo "raw $raw"
-  echo "jpg $jpg"
 
   mkdir -p $jpg
   mkdir -p $raw
