@@ -15,7 +15,7 @@ These scripts are meant to help when working with large photo dumps.
 
 ```bash
 usage: photos -rm img1 img2 ... imgN
-       photos -sort [--all] [source]
+       photos -sort [--all] [src]
        photos -mv src dst [lower_limit] [upper_limit]
 ```
 
@@ -27,7 +27,7 @@ Remove photos of the form `_MG_xxx.JPG` and `_MG_xxx.CR2`.
 
 Organize your files into a `$parentdir-jpg` and `parentdir-raw`
 directory. You can pass in a directory name directly or the `--all` flag
-to handle subdirectories recursively.
+to handle subdirectories located in `$src` recursively.
 
 
 `photos -mv`
