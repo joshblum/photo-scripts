@@ -16,39 +16,50 @@ photo_rm() {
 
 photo_sort() {
   if [ -z $1 ]; then
-    parent=""
+    path="`pwd`"
   else
-    parent="$1/"
+    path="$1"
   fi
-
-  jpg=$parent"jpg"
-  raw=$parent"raw"
+  parent=`basename $path`
+  jpg=$path/$parent-"jpg"
+  raw=$path/$parent-"raw"
 
   mkdir -p $jpg
   mkdir -p $raw
 
-  echo "Moving *.JPG to $jpg"
-  mv $parent*.JPG $jpg 2>/dev/null
+  echo "Moving $path/*.JPG to $jpg"
+  mv $path/*.JPG $jpg 2>/dev/null
 
-  echo "Moving *.CR2 to $raw"
-  mv $parent*.CR2 $raw 2>/dev/null
+  echo "Moving $path/*.CR2 to $raw"
+  mv $path/*.CR2 $raw 2>/dev/null
 }
 
 photo_mv() {
   if [ -z $1 ]; then
     echo "`usage`"
-    echo "Error: need src directory"
+    echo "Error: need dst directory"
     exit 1
-  else
-    srcdir=$1
   fi
 
-  mkdir -p $srcdir
-
-  if [[ ( -z $2 ) && ( -z $3) ]]; then
-    mv $IMG_BASE* $srcdir
+  if [ -z $4 ]; then # no limits
+    if [ -z $2 ]; then # $src defaults to current dir
+      src=.
+      dst=$1
+    else
+      src=$1
+      dst=$2
+    fi
   else
-    mv $IMG_BASE{$2..$3}* src
+    src=$1
+    dst=$2
+  fi
+
+  mkdir -p $src
+
+  if [[ ( -z $3 ) && ( -z $4) ]]; then
+    mv $src/$IMG_BASE* $dst
+  else
+    mv $src/$IMG_BASE{$3..$4}* $dst
   fi
 
 }
@@ -56,7 +67,7 @@ photo_mv() {
 usage() {
   echo "usage: photos -rm img1 img2 ... imgN"
   echo "       photos -sort [--all] [source]"
-  echo "       photos -mv src [lower_limit] [upper_limit]"
+  echo "       photos -mv src dst [lower_limit] [upper_limit]"
 }
 
 if [ "$1"  == "-sort" ]; then

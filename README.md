@@ -12,13 +12,28 @@ Usage
 --------
 
 These scripts are meant to help when working with large photo dumps.
-After installation, you can use two commands:
 
-`photos -rm img1 img2 ... imgN` will remove photos of the form `_MG_xxx.JPG` and
-`_MG_xxx.CR2`.
+```bash
+usage: photos -rm img1 img2 ... imgN
+       photos -sort [--all] [source]
+       photos -mv src dst [lower_limit] [upper_limit]
+```
 
-`photos -sort` will organize your files into a `jpg` and `raw` directory. You
-can pass in a directory name or the `--all` flag to handle subdirectories.
+`photos -rm`
+
+Remove photos of the form `_MG_xxx.JPG` and `_MG_xxx.CR2`.
+
+`photos -sort`
+
+Organize your files into a `$parentdir-jpg` and `parentdir-raw`
+directory. You can pass in a directory name directly or the `--all` flag
+to handle subdirectories recursively.
+
+
+`photos -mv`
+
+Moves files within `$src` to `$dst`. Optionally accepts
+`$lower_limit` and `$upper_limit` to only move files within ranges.
 
 Uninstallation
 --------
