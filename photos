@@ -20,18 +20,21 @@ photo_sort() {
   else
     path="$1"
   fi
-  parent=`basename $path`
-  jpg=$path/$parent-"jpg"
-  raw=$path/$parent-"raw"
+  parent=`basename "$path"`
+  if [ "$parent" == "." ]; then
+    return 1
+  fi
+  jpg="$path"/"$parent"-jpg
+  raw="$path"/"$parent"-raw
 
-  mkdir -p $jpg
-  mkdir -p $raw
+  mkdir -p "$jpg"
+  mkdir -p "$raw"
 
-  echo "Moving $path/*.JPG to $jpg"
-  mv $path/*.JPG $jpg 2>/dev/null
+  echo "Moving "$path"/*.JPG to "$jpg""
+  mv "$path"/*.JPG "$jpg" 2>/dev/null
 
-  echo "Moving $path/*.CR2 to $raw"
-  mv $path/*.CR2 $raw 2>/dev/null
+  echo "Moving "$path"/*.CR2 to $raw"
+  mv "$path"/*.CR2 "$raw" 2>/dev/null
 }
 
 photo_mv() {
@@ -43,23 +46,23 @@ photo_mv() {
 
   if [ -z $4 ]; then # no limits
     if [ -z $2 ]; then # $src defaults to current dir
-      src=.
-      dst=$1
+      src="."
+      dst="$1"
     else
-      src=$1
-      dst=$2
+      src="$1"
+      dst="$2"
     fi
   else
-    src=$1
-    dst=$2
+    src="$1"
+    dst="$2"
   fi
 
   mkdir -p $src
 
   if [[ ( -z $3 ) && ( -z $4) ]]; then
-    mv $src/$IMG_BASE* $dst
+    mv "$src"/"$IMG_BASE"* "$dst"
   else
-    mv $src/$IMG_BASE{$3..$4}* $dst
+    mv "$src"/"$IMG_BASE"{$3..$4}* "$dst"
   fi
 
 }
@@ -72,10 +75,12 @@ usage() {
 
 if [ "$1"  == "-sort" ]; then
   if [ "$2" == "--all" ]; then
-    for dir in `ls $3`; do
-      if [ -d $dir ]; then
-        photo_sort $dir
-      fi
+    src=$3
+    if [ -z $src ]; then # no src
+      src=`dirname pwd`
+    fi
+    for dir in `find $src -type d | grep -v "jpg\|raw"`; do
+      photo_sort $dir
     done;
   else
     photo_sort $2
