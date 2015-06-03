@@ -57,12 +57,12 @@ photo_mv() {
     dst="$2"
   fi
 
-  mkdir -p $src
+  mkdir -p $dst
 
   if [[ ( -z $3 ) && ( -z $4) ]]; then
-    mv "$src"/"$IMG_BASE"* "$dst"
+    mv "$src"/"$IMG_BASE"* "$dst" 2>/dev/null
   else
-    mv "$src"/"$IMG_BASE"{$3..$4}* "$dst"
+    mv "$src"/"$IMG_BASE"{$3..$4}* "$dst" 2>/dev/null
   fi
 
 }
