@@ -33,7 +33,7 @@ photo_sort() {
   echo "Moving "$path"/*.JPG to "$jpg""
   mv "$path"/*.JPG "$jpg" 2>/dev/null
 
-  echo "Moving "$path"/*.CR2 to $raw"
+  echo "Moving "$path"/*.CR2 to "$raw""
   mv "$path"/*.CR2 "$raw" 2>/dev/null
 }
 
@@ -60,10 +60,12 @@ photo_mv() {
   mkdir -p $dst
 
   if [[ ( -z $3 ) && ( -z $4) ]]; then
-    mv "$src"/"$IMG_BASE"* "$dst" 2>/dev/null
+    cmd="mv "$src/$IMG_BASE*" "$dst""
   else
-    mv "$src"/"$IMG_BASE"{$3..$4}* "$dst" 2>/dev/null
+    cmd="mv "$src/$IMG_BASE{$3..$4}*" "$dst""
   fi
+  echo $cmd
+  $cmd 2>/dev/null
 
 }
 
