@@ -24,17 +24,21 @@ photo_sort() {
   if [ "$parent" == "." ]; then
     return 1
   fi
-  jpg="$path"/"$parent"-jpg
+#  jpg="$path"/"$parent"-jpg
   raw="$path"/"$parent"-raw
 
-  mkdir -p "$jpg"
+#  mkdir -p "$jpg"
   mkdir -p "$raw"
 
-  echo "Moving "$path"/*.JPG to "$jpg""
-  mv "$path"/*.JPG "$jpg" 2>/dev/null
+#  echo "Moving "$path"/*.JPG to "$jpg""
+#  mv "$path"/*.JPG "$jpg" 2>/dev/null
 
   echo "Moving "$path"/*.CR2 to "$raw""
   mv "$path"/*.CR2 "$raw" 2>/dev/null
+
+  # cleanup empty folders
+#  find "$jpg" -mindepth 1 -print -quit | grep -q . || rmdir $jpg
+  find "$raw" -mindepth 1 -print -quit | grep -q . || rmdir $raw
 }
 
 photo_mv() {
@@ -79,10 +83,10 @@ if [ "$1"  == "-sort" ]; then
   if [ "$2" == "--all" ]; then
     src=$3
     if [ -z $src ]; then # no src
-      src=`dirname pwd`
+      src="`dirname pwd`"
     fi
     for dir in `find $src -type d | grep -v "jpg\|raw"`; do
-      photo_sort $dir
+      photo_sort "$dir"
     done;
   else
     photo_sort $2
