@@ -73,10 +73,22 @@ photo_mv() {
 
 }
 
+dropbox_clean(){
+  for i in *-*; do
+    dirname="${i/-*/}" # extract uploaded username
+    dirname="${dirname/\ /-}" # replace space with '-'
+    dirname=`echo "$dirname" | awk '{ print tolower($1) }'` #to lowercase
+    filename="${i/*-\ /}"
+    mkdir -p "$dirname"
+    mv "$i" "$dirname/$filename"
+  done
+}
+
 usage() {
   echo "usage: photos -rm img1 img2 ... imgN"
   echo "       photos -sort [--all] [source]"
   echo "       photos -mv src dst [lower_limit] [upper_limit]"
+  echo "       photos -db-clean"
 }
 
 if [ "$1"  == "-sort" ]; then
@@ -95,6 +107,8 @@ elif [ "$1" ==  "-rm" ]; then
     photo_rm ${*:2} # all args except the first
 elif [ "$1" ==  "-mv" ]; then
     photo_mv ${*:2} # all args except the first
+elif [ "$1" ==  "-db-clean" ]; then
+    dropbox_clean
 else
   usage
 fi
