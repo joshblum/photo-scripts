@@ -75,6 +75,9 @@ photo_mv() {
 
 dropbox_clean(){
   for i in *-*; do
+    if [ -d "$i" ]; then
+      continue
+    fi
     dirname="${i/-*/}" # extract uploaded username
     dirname="${dirname/\ /-}" # replace space with '-'
     dirname=`echo "$dirname" | awk '{ print tolower($1) }'` #to lowercase
@@ -86,24 +89,24 @@ dropbox_clean(){
 
 usage() {
   echo "usage: photos -rm img1 img2 ... imgN"
-  echo "       photos -sort [--all] [source]"
+#  echo "       photos -sort [--all] [source]"
   echo "       photos -mv src dst [lower_limit] [upper_limit]"
   echo "       photos -db-clean"
 }
 
-if [ "$1"  == "-sort" ]; then
-  if [ "$2" == "--all" ]; then
-    src=$3
-    if [ -z $src ]; then # no src
-      src="`dirname pwd`"
-    fi
-    for dir in `find $src -type d | grep -v "jpg\|raw"`; do
-      photo_sort "$dir"
-    done;
-  else
-    photo_sort $2
-  fi
-elif [ "$1" ==  "-rm" ]; then
+#if [ "$1"  == "-sort" ]; then
+#  if [ "$2" == "--all" ]; then
+#    src=$3
+#    if [ -z $src ]; then # no src
+#      src="`dirname pwd`"
+#    fi
+#    for dir in `find $src -type d | grep -v "jpg\|raw"`; do
+#      photo_sort "$dir"
+#    done;
+#  else
+#    photo_sort $2
+#  fi
+if [ "$1" ==  "-rm" ]; then
     photo_rm ${*:2} # all args except the first
 elif [ "$1" ==  "-mv" ]; then
     photo_mv ${*:2} # all args except the first
